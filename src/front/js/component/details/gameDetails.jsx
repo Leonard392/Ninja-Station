@@ -7,7 +7,7 @@ export const GameDetails = ({ gameId }) => {
 
     const [gameDetails, setGameDetails] = useState(null);
 
-    let url = '/api/rawg/games/' + params.id;
+    let url = '/api/igdb/games/' + params.id;
 
     useEffect(() => {
         fetch(url)

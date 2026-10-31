@@ -7,7 +7,7 @@ export const CreatorDetails = () => {
 
     const [creatorDetails, setCreatorDetails] = useState(null);
 
-    let url = `/api/rawg/creators/${params.id}`;
+    let url = `/api/igdb/creators/${params.id}`;
 
     useEffect(() => {
         fetch(url)

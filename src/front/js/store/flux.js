@@ -146,7 +146,7 @@ export const getState = ({ getStore, getActions, setStore }) => {
 
 					// Define la función fetchGameData aquí
 					const fetchGameData = async (gameId) => {
-						const response = await fetch(`/api/rawg/games/${gameId}`);
+						const response = await fetch(`/api/igdb/games/${gameId}`);
 						const gameData = await response.json();
 						return gameData;
 					};
@@ -249,7 +249,7 @@ export const getState = ({ getStore, getActions, setStore }) => {
 
 					// Define la función fetchGameData aquí
 					const fetchCreatorData = async (creatorId) => {
-						const response = await fetch(`/api/rawg/creators/${creatorId}`);
+						const response = await fetch(`/api/igdb/creators/${creatorId}`);
 						const creatorData = await response.json();
 						return creatorData;
 					};
@@ -351,7 +351,7 @@ export const getState = ({ getStore, getActions, setStore }) => {
 
 					// Define la función fetchGameData aquí
 					const fetchPlatformData = async (platformId) => {
-						const response = await fetch(`/api/rawg/platforms/${platformId}`);
+						const response = await fetch(`/api/igdb/platforms/${platformId}`);
 						const platformData = await response.json();
 						return platformData;
 					};
@@ -405,7 +405,7 @@ export const getState = ({ getStore, getActions, setStore }) => {
 			fetchBestGames2024: async () => {
 				try {
 					// Fetch best games of 2024 from the API
-					const response = await fetch(`/api/rawg/games?dates=2024-01-01,2024-12-31&ordering=-added&page_size=${PAGE_SIZE}`);
+					const response = await fetch(`/api/igdb/games?dates=2024-01-01,2024-12-31&ordering=-added&page_size=${PAGE_SIZE}`);
 					const data = await response.json();
 					setStore({ bestGames2024: data.results });
 				} catch (error) {
@@ -415,7 +415,7 @@ export const getState = ({ getStore, getActions, setStore }) => {
 			fetchTopCreators: async () => {
 				try {
 					// Fetch top creators from the API
-					const response = await fetch(`/api/rawg/creators?page_size=${PAGE_SIZE}`);
+					const response = await fetch(`/api/igdb/creators?page_size=${PAGE_SIZE}`);
 					const data = await response.json();
 					setStore({ topCreators: data.results });
 				} catch (error) {
@@ -425,7 +425,7 @@ export const getState = ({ getStore, getActions, setStore }) => {
 			fetchPlatforms: async () => {
 				try {
 					// Fetch top platforms from the API
-					const response = await fetch(`/api/rawg/platforms?page_size=${PAGE_SIZE}`);
+					const response = await fetch(`/api/igdb/platforms?page_size=${PAGE_SIZE}`);
 					const data = await response.json();
 					setStore({ Platforms: data.results });
 				} catch (error) {
@@ -435,7 +435,7 @@ export const getState = ({ getStore, getActions, setStore }) => {
 			fetchStores: async () => {
 				try {
 					// Fetch top stores from the API
-					const response = await fetch(`/api/rawg/stores?page_size=${PAGE_SIZE}`);
+					const response = await fetch(`/api/igdb/stores?page_size=${PAGE_SIZE}`);
 					const data = await response.json();
 					setStore({ Stores: data.results });
 				} catch (error) {

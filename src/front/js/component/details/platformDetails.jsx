@@ -7,7 +7,7 @@ export const PlatformDetails = () => {
 
     const [platformDetails, setPlatformDetails] = useState(null);
 
-    let url = `/api/rawg/platforms/${params.id}`;
+    let url = `/api/igdb/platforms/${params.id}`;
 
     useEffect(() => {
         fetch(url)

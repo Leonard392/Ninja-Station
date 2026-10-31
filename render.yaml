@@ -22,7 +22,9 @@ services:
         generateValue: true
       - key: JWT_SECRET_KEY
         generateValue: true
-      - key: RAWG_API_KEY
+      - key: IGDB_CLIENT_ID
+        sync: false
+      - key: IGDB_CLIENT_SECRET
         sync: false
       - key: PYTHON_VERSION
         value: 3.10.6

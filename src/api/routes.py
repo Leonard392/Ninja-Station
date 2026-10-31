@@ -15,29 +15,225 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 api = Blueprint('api', __name__)
 
+IGDB_ACCESS_TOKEN = None
+
+
+def get_igdb_access_token():
+    global IGDB_ACCESS_TOKEN
+    if IGDB_ACCESS_TOKEN:
+        return IGDB_ACCESS_TOKEN
+
+    client_id = os.getenv('IGDB_CLIENT_ID')
+    client_secret = os.getenv('IGDB_CLIENT_SECRET')
+    if not client_id or not client_secret:
+        raise ValueError("IGDB_CLIENT_ID and IGDB_CLIENT_SECRET are not configured")
+
+    token_url = "https://id.twitch.tv/oauth2/token"
+    body = urlencode({
+        "client_id": client_id,
+        "client_secret": client_secret,
+        "grant_type": "client_credentials",
+    }).encode("utf-8")
+    token_request = Request(token_url, data=body, method="POST")
+    with urlopen(token_request, timeout=15) as response:
+        token_data = json.loads(response.read().decode("utf-8"))
+
+    IGDB_ACCESS_TOKEN = token_data["access_token"]
+    return IGDB_ACCESS_TOKEN
+
+
+def igdb_request(endpoint, query):
+    access_token = get_igdb_access_token()
+    client_id = os.getenv('IGDB_CLIENT_ID')
+    request_obj = Request(
+        f"https://api.igdb.com/v4/{endpoint}",
+        data=query.encode("utf-8"),
+        headers={
+            "Client-ID": client_id,
+            "Authorization": f"Bearer {access_token}",
+            "Accept": "application/json",
+            "Content-Type": "text/plain",
+        },
+        method="POST",
+    )
+    with urlopen(request_obj, timeout=15) as response:
+        return json.loads(response.read().decode("utf-8"))
+
+
+def image_url(image_id, size="cover_big"):
+    if not image_id:
+        return ""
+    return f"https://images.igdb.com/igdb/image/upload/t_{size}/{image_id}.jpg"
+
+
+def normalize_game(game):
+    cover = game.get("cover") or {}
+    platforms = [{"platform": {"name": platform.get("name", "")}}
+                  for platform in game.get("platforms") or []]
+    genres = [{"name": genre.get("name", "")}
+              for genre in game.get("genres") or []]
+    involved = game.get("involved_companies") or []
+    developers = [{"name": company.get("company", {}).get("name", "")}
+                  for company in involved if company.get("developer")]
+    publishers = [{"name": company.get("company", {}).get("name", "")}
+                  for company in involved if company.get("publisher")]
+
+    first_release_date = game.get("first_release_date")
+    released = ""
+    if first_release_date:
+        from datetime import datetime, timezone
+        released = datetime.fromtimestamp(first_release_date, timezone.utc).strftime("%Y-%m-%d")
+
+    return {
+        "id": game.get("id"),
+        "name": game.get("name", ""),
+        "slug": game.get("slug", ""),
+        "description": game.get("summary") or game.get("storyline") or "",
+        "background_image": image_url(cover.get("image_id"), "1080p"),
+        "released": released,
+        "rating": round((game.get("rating") or 0) / 20, 1),
+        "platforms": platforms,
+        "genres": genres,
+        "developers": developers,
+        "publishers": publishers,
+    }
+
+
+def normalize_company(company):
+    logo = company.get("logo") or {}
+    image = image_url(logo.get("image_id"), "logo_med")
+    return {
+        "id": company.get("id"),
+        "name": company.get("name", ""),
+        "slug": company.get("slug", ""),
+        "description": company.get("description") or "",
+        "image": image,
+        "image_background": image,
+        "rating": 0,
+    }
+
+
+def normalize_platform(platform):
+    logo = platform.get("platform_logo") or {}
+    image = image_url(logo.get("image_id"), "1080p")
+    return {
+        "id": platform.get("id"),
+        "name": platform.get("name", ""),
+        "slug": platform.get("slug", ""),
+        "description": platform.get("summary") or "",
+        "image_background": image,
+    }
+
+
+def normalize_store(store_id, name, slug):
+    return {
+        "id": store_id,
+        "name": name,
+        "slug": slug,
+        "domain": "",
+        "games_count": 0,
+        "image_background": "",
+    }
+
+
 @api.route('/rawg/<path:rawg_path>', methods=['GET'])
-def proxy_rawg(rawg_path):
+@api.route('/igdb/<path:rawg_path>', methods=['GET'])
+def proxy_igdb(rawg_path):
     allowed_resources = {'games', 'creators', 'platforms', 'stores', 'genres'}
     resource = rawg_path.split('/', 1)[0]
     if resource not in allowed_resources:
-        return jsonify({"message": "Unsupported RAWG resource"}), 404
-
-    rawg_key = os.getenv('RAWG_API_KEY')
-    if not rawg_key:
-        return jsonify({"message": "RAWG API key is not configured"}), 503
+        return jsonify({"message": "Unsupported IGDB resource"}), 404
 
     params = request.args.to_dict(flat=True)
-    params['key'] = rawg_key
-    url = f"https://api.rawg.io/api/{rawg_path}?{urlencode(params)}"
+    limit = min(max(int(params.get('page_size', 20)), 1), 50)
+    page = max(int(params.get('page', 1)), 1)
+    offset = (page - 1) * limit
 
     try:
-        upstream_request = Request(url, headers={'User-Agent': 'Ninja-Station/1.0'})
-        with urlopen(upstream_request, timeout=15) as upstream:
-            return jsonify(json.loads(upstream.read().decode('utf-8'))), upstream.status
+        if resource == 'games':
+            parts = rawg_path.split('/')
+            if len(parts) == 2:
+                game = igdb_request("games", f"fields id,name,slug,summary,storyline,cover.image_id,first_release_date,rating,platforms.name,genres.name,involved_companies.company.name,involved_companies.developer,involved_companies.publisher; where id = {parts[1]}; limit 1;")
+                if not game:
+                    return jsonify({"message": "Game not found"}), 404
+                return jsonify(normalize_game(game[0])), 200
+
+            genre_slug = params.get('genres')
+            where = ""
+            if genre_slug:
+                genre_rows = igdb_request("genres", f"fields id,name,slug; where slug = \"{genre_slug}\"; limit 1;")
+                if genre_rows:
+                    where = f" where genres = ({genre_rows[0]['id']})"
+
+            if params.get('dates'):
+                year_start, year_end = params['dates'].split(',')[0:2] if ',' in params['dates'] else (params['dates'], params['dates'])
+                try:
+                    import calendar, time
+                    start = calendar.timegm(time.strptime(year_start, "%Y-%m-%d")) if '-' in year_start else int(year_start) * 0
+                    end = calendar.timegm(time.strptime(year_end, "%Y-%m-%d")) if '-' in year_end else 0
+                    if start and end:
+                        date_where = f" where first_release_date >= {start} & first_release_date <= {end}"
+                        where = date_where
+                except ValueError:
+                    pass
+
+            if not params.get('dates'):
+                where = where or " where first_release_date != null"
+
+            query = f"fields id,name,slug,summary,storyline,cover.image_id,first_release_date,rating,platforms.name,genres.name,involved_companies.company.name,involved_companies.developer,involved_companies.publisher;{where} sort first_release_date desc; limit {limit}; offset {offset};"
+            games = igdb_request("games", query)
+            results = [normalize_game(game) for game in games]
+            return jsonify({"count": len(results), "next": None, "previous": None, "results": results}), 200
+
+        if resource == 'creators':
+            parts = rawg_path.split('/')
+            if len(parts) == 2:
+                companies = igdb_request("companies", f"fields id,name,slug,description,logo.image_id; where id = {parts[1]}; limit 1;")
+                if not companies:
+                    return jsonify({"message": "Creator not found"}), 404
+                return jsonify(normalize_company(companies[0])), 200
+            companies = igdb_request("companies", f"fields id,name,slug,description,logo.image_id; sort name asc; limit {limit}; offset {offset};")
+            results = [normalize_company(company) for company in companies]
+            return jsonify({"count": len(results), "next": None, "previous": None, "results": results}), 200
+
+        if resource == 'platforms':
+            parts = rawg_path.split('/')
+            if len(parts) == 2:
+                platforms = igdb_request("platforms", f"fields id,name,slug,summary,platform_logo.image_id; where id = {parts[1]}; limit 1;")
+                if not platforms:
+                    return jsonify({"message": "Platform not found"}), 404
+                return jsonify(normalize_platform(platforms[0])), 200
+            platforms = igdb_request("platforms", f"fields id,name,slug,summary,platform_logo.image_id; sort name asc; limit {limit}; offset {offset};")
+            results = [normalize_platform(platform) for platform in platforms]
+            return jsonify({"count": len(results), "next": None, "previous": None, "results": results}), 200
+
+        if resource == 'stores':
+            parts = rawg_path.split('/')
+            stores = [
+                normalize_store(1, "Steam", "steam"),
+                normalize_store(2, "Epic Games Store", "epic-games-store"),
+                normalize_store(3, "GOG.com", "gog"),
+                normalize_store(4, "Microsoft Store", "microsoft-store"),
+                normalize_store(5, "PlayStation Store", "playstation-store"),
+                normalize_store(6, "Xbox Store", "xbox-store"),
+                normalize_store(7, "Nintendo Store", "nintendo-store"),
+            ]
+            if len(parts) == 2:
+                for store in stores:
+                    if str(store["id"]) == parts[1]:
+                        return jsonify(store), 200
+                return jsonify({"message": "Store not found"}), 404
+            return jsonify({"count": len(stores), "next": None, "previous": None, "results": stores}), 200
+
+        genres = igdb_request("genres", f"fields id,name,slug; sort name asc; limit {limit}; offset {offset};")
+        return jsonify({"count": len(genres), "next": None, "previous": None, "results": genres}), 200
+
+    except ValueError as error:
+        return jsonify({"message": str(error)}), 503
     except HTTPError as error:
-        return jsonify({"message": "RAWG request failed", "status": error.code}), error.code
+        return jsonify({"message": "IGDB request failed", "status": error.code}), error.code
     except URLError:
-        return jsonify({"message": "RAWG service is unavailable"}), 502
+        return jsonify({"message": "IGDB service is unavailable"}), 502
 
 # Allow CORS requests to this API
 CORS(api)

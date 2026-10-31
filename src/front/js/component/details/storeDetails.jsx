@@ -8,7 +8,7 @@ export const StoreDetails = ({ gameId }) => {
 
     const [storeDetails, setStoreDetails] = useState(null);
 
-    let url = '/api/rawg/stores/' + params.id;
+    let url = '/api/igdb/stores/' + params.id;
 
     useEffect(() => {
         fetch(url)

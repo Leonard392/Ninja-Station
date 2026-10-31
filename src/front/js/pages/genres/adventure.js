@@ -26,7 +26,7 @@ export const Adventure = () => {
 
     const getGames = () =>{
         setLoading(true);
-        let url = `/api/rawg/games?genres=adventure&page=${page}`;
+        let url = `/api/igdb/games?genres=adventure&page=${page}`;
         fetch(url)
             .then(response => response.json())
             .then(data => {
