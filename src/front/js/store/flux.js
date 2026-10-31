@@ -7,7 +7,7 @@ export const getState = ({ getStore, getActions, setStore }) => {
 
 	return {
 		store: {
-			token: null,
+			token: localStorage.getItem('token'),
 			error: null,
 			favoritesGames: [],
 			favoritesCreators: [],
@@ -415,7 +415,7 @@ export const getState = ({ getStore, getActions, setStore }) => {
 			fetchTopCreators: async () => {
 				try {
 					// Fetch top creators from the API
-					const response = await fetch(`/api/rawg/creators&page_size=${PAGE_SIZE}`);
+					const response = await fetch(`/api/rawg/creators?page_size=${PAGE_SIZE}`);
 					const data = await response.json();
 					setStore({ topCreators: data.results });
 				} catch (error) {
@@ -424,8 +424,8 @@ export const getState = ({ getStore, getActions, setStore }) => {
 			},
 			fetchPlatforms: async () => {
 				try {
-					// Fetch top creators from the API
-					const response = await fetch(`/api/rawg/platforms&page_size=${PAGE_SIZE}`);
+					// Fetch top platforms from the API
+					const response = await fetch(`/api/rawg/platforms?page_size=${PAGE_SIZE}`);
 					const data = await response.json();
 					setStore({ Platforms: data.results });
 				} catch (error) {
@@ -434,8 +434,8 @@ export const getState = ({ getStore, getActions, setStore }) => {
 			},
 			fetchStores: async () => {
 				try {
-					// Fetch top creators from the API
-					const response = await fetch(`/api/rawg/stores&page_size=${PAGE_SIZE}`);
+					// Fetch top stores from the API
+					const response = await fetch(`/api/rawg/stores?page_size=${PAGE_SIZE}`);
 					const data = await response.json();
 					setStore({ Stores: data.results });
 				} catch (error) {

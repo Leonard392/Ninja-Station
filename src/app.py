@@ -46,6 +46,10 @@ setup_commands(app)
 # Add all endpoints form the API with a "api" prefix
 app.register_blueprint(api, url_prefix='/api')
 
+@app.route('/health')
+def health():
+    return jsonify({"status": "ok"}), 200
+
 # Handle/serialize errors like a JSON object
 
 
