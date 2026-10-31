@@ -4,10 +4,10 @@ import "../../../styles/details.css";
 
 export const GameDetails = ({ gameId }) => {
     const params = useParams();
-    const KEY_API = process.env.RAWG_API_KEY;
+
     const [gameDetails, setGameDetails] = useState(null);
 
-    let url = 'https://api.rawg.io/api/games/' + params.id + "?key=" + KEY_API; 
+    let url = '/api/rawg/games/' + params.id;
 
     useEffect(() => {
         fetch(url)
@@ -33,7 +33,7 @@ export const GameDetails = ({ gameId }) => {
                         <p><strong><i class="fa-solid fa-gear"></i> Developers:</strong> {gameDetails.developers.map(developer => developer.name).join(', ')}</p>
                         <p><strong><i class="fa-solid fa-gamepad"></i> Genres:</strong> {gameDetails.genres.map(genre => genre.name).join(', ')}</p>
                         <p><strong><i class="fa-solid fa-globe"></i> Publisher:</strong> {gameDetails.publishers.map(publisher => publisher.name).join(', ')}</p>
-                        
+
                         {/* Puedes agregar más detalles del juego según sea necesario */}
                     </div>
                 </>

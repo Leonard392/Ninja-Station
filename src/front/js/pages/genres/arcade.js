@@ -6,11 +6,11 @@ import "../../../styles/genres.css";
 
 export const Arcade = () => {
     const { store, actions } = useContext(Context);
-    const KEY_API = process.env.RAWG_API_KEY;
+
     const [games, setGames] = useState([]);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
-    
+
     const observer = useRef();
     const lastGameCard = useCallback(node => {
         if(loading) return ;
@@ -26,7 +26,7 @@ export const Arcade = () => {
 
     const getGames = () =>{
         setLoading(true);
-        let url = `https://api.rawg.io/api/games?genres=arcade&page=${page}&key=${KEY_API}`;
+        let url = `/api/rawg/games?genres=arcade&page=${page}`;
         fetch(url)
             .then(response => response.json())
             .then(data => {
@@ -44,7 +44,7 @@ export const Arcade = () => {
         if (page){
             getGames();
         }
-    }, [page]); 
+    }, [page]);
 
     return (
         <div className="games-body">

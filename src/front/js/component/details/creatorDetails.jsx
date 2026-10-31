@@ -4,10 +4,10 @@ import "../../../styles/details.css";
 
 export const CreatorDetails = () => {
     const params = useParams();
-    const KEY_API = process.env.RAWG_API_KEY;
+
     const [creatorDetails, setCreatorDetails] = useState(null);
 
-    let url = `https://api.rawg.io/api/creators/${params.id}?key=${KEY_API}`;
+    let url = `/api/rawg/creators/${params.id}`;
 
     useEffect(() => {
         fetch(url)

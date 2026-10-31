@@ -4,10 +4,10 @@ import "../../../styles/details.css";
 
 export const PlatformDetails = () => {
     const params = useParams();
-    const KEY_API = process.env.RAWG_API_KEY;
+
     const [platformDetails, setPlatformDetails] = useState(null);
 
-    let url = `https://api.rawg.io/api/platforms/${params.id}?key=${KEY_API}`;
+    let url = `/api/rawg/platforms/${params.id}`;
 
     useEffect(() => {
         fetch(url)

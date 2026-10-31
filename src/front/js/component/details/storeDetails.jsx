@@ -5,10 +5,10 @@ import "../../../styles/details.css";
 
 export const StoreDetails = ({ gameId }) => {
     const params = useParams()
-    const KEY_API = process.env.RAWG_API_KEY;
+
     const [storeDetails, setStoreDetails] = useState(null);
 
-    let url = 'https://api.rawg.io/api/stores/' + params.id + "?key=" + KEY_API; 
+    let url = '/api/rawg/stores/' + params.id;
 
     useEffect(() => {
         fetch(url)

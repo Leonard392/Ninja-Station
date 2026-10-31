@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export const getState = ({ getStore, getActions, setStore }) => {
-	const KEY_API = process.env.RAWG_API_KEY;
+
 	const PAGE_SIZE = 20; // Number of games per page
 	const [error, setError] = useState(null);
 
@@ -146,7 +146,7 @@ export const getState = ({ getStore, getActions, setStore }) => {
 
 					// Define la función fetchGameData aquí
 					const fetchGameData = async (gameId) => {
-						const response = await fetch(`https://api.rawg.io/api/games/${gameId}?key=${KEY_API}`);
+						const response = await fetch(`/api/rawg/games/${gameId}`);
 						const gameData = await response.json();
 						return gameData;
 					};
@@ -249,7 +249,7 @@ export const getState = ({ getStore, getActions, setStore }) => {
 
 					// Define la función fetchGameData aquí
 					const fetchCreatorData = async (creatorId) => {
-						const response = await fetch(`https://api.rawg.io/api/creators/${creatorId}?key=${KEY_API}`);
+						const response = await fetch(`/api/rawg/creators/${creatorId}`);
 						const creatorData = await response.json();
 						return creatorData;
 					};
@@ -351,7 +351,7 @@ export const getState = ({ getStore, getActions, setStore }) => {
 
 					// Define la función fetchGameData aquí
 					const fetchPlatformData = async (platformId) => {
-						const response = await fetch(`https://api.rawg.io/api/platforms/${platformId}?key=${KEY_API}`);
+						const response = await fetch(`/api/rawg/platforms/${platformId}`);
 						const platformData = await response.json();
 						return platformData;
 					};
@@ -401,11 +401,11 @@ export const getState = ({ getStore, getActions, setStore }) => {
 
 			//Fetchs from Rawg.io API
 
-			
+
 			fetchBestGames2024: async () => {
 				try {
 					// Fetch best games of 2024 from the API
-					const response = await fetch(`https://api.rawg.io/api/games?dates=2024-01-01,2024-12-31&ordering=-added&page_size=${PAGE_SIZE}&key=${KEY_API}`);
+					const response = await fetch(`/api/rawg/games?dates=2024-01-01,2024-12-31&ordering=-added&page_size=${PAGE_SIZE}`);
 					const data = await response.json();
 					setStore({ bestGames2024: data.results });
 				} catch (error) {
@@ -415,7 +415,7 @@ export const getState = ({ getStore, getActions, setStore }) => {
 			fetchTopCreators: async () => {
 				try {
 					// Fetch top creators from the API
-					const response = await fetch(`https://api.rawg.io/api/creators?key=${KEY_API}&page_size=${PAGE_SIZE}`);
+					const response = await fetch(`/api/rawg/creators&page_size=${PAGE_SIZE}`);
 					const data = await response.json();
 					setStore({ topCreators: data.results });
 				} catch (error) {
@@ -425,7 +425,7 @@ export const getState = ({ getStore, getActions, setStore }) => {
 			fetchPlatforms: async () => {
 				try {
 					// Fetch top creators from the API
-					const response = await fetch(`https://api.rawg.io/api/platforms?key=${KEY_API}&page_size=${PAGE_SIZE}`);
+					const response = await fetch(`/api/rawg/platforms&page_size=${PAGE_SIZE}`);
 					const data = await response.json();
 					setStore({ Platforms: data.results });
 				} catch (error) {
@@ -435,7 +435,7 @@ export const getState = ({ getStore, getActions, setStore }) => {
 			fetchStores: async () => {
 				try {
 					// Fetch top creators from the API
-					const response = await fetch(`https://api.rawg.io/api/stores?key=${KEY_API}&page_size=${PAGE_SIZE}`);
+					const response = await fetch(`/api/rawg/stores&page_size=${PAGE_SIZE}`);
 					const data = await response.json();
 					setStore({ Stores: data.results });
 				} catch (error) {

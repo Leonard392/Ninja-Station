@@ -6,9 +6,38 @@ from api.models import db, User, FavoriteGame, FavoriteCreator, FavoritePlatform
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+import os
+import json
+from urllib.parse import urlencode
+from urllib.request import Request, urlopen
+from urllib.error import HTTPError, URLError
 from werkzeug.security import generate_password_hash, check_password_hash
 
 api = Blueprint('api', __name__)
+
+@api.route('/rawg/<path:rawg_path>', methods=['GET'])
+def proxy_rawg(rawg_path):
+    allowed_resources = {'games', 'creators', 'platforms', 'stores', 'genres'}
+    resource = rawg_path.split('/', 1)[0]
+    if resource not in allowed_resources:
+        return jsonify({"message": "Unsupported RAWG resource"}), 404
+
+    rawg_key = os.getenv('RAWG_API_KEY')
+    if not rawg_key:
+        return jsonify({"message": "RAWG API key is not configured"}), 503
+
+    params = request.args.to_dict(flat=True)
+    params['key'] = rawg_key
+    url = f"https://api.rawg.io/api/{rawg_path}?{urlencode(params)}"
+
+    try:
+        upstream_request = Request(url, headers={'User-Agent': 'Ninja-Station/1.0'})
+        with urlopen(upstream_request, timeout=15) as upstream:
+            return jsonify(json.loads(upstream.read().decode('utf-8'))), upstream.status
+    except HTTPError as error:
+        return jsonify({"message": "RAWG request failed", "status": error.code}), error.code
+    except URLError:
+        return jsonify({"message": "RAWG service is unavailable"}), 502
 
 # Allow CORS requests to this API
 CORS(api)
