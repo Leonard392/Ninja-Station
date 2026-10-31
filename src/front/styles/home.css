@@ -1,0 +1,136 @@
+/*
+    home.css: This website contains selectors only used in home.css
+
+    All pages share the styles on index.css but you should create 
+    one more css for each page that will contain the selected used 
+    on that page only (the ones not reused in other pages).
+*/
+
+body{
+  background-color: #000026;
+}
+
+.main-content{
+    color: white;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.left{
+    width: 60%;
+    padding: 0 80px;
+}
+
+.right{
+  width: 40%;
+}
+
+.logo-img{
+    width: 100%;
+}
+
+.left h1{
+    font-size: 80px;
+}
+
+.left h1 span{
+    color: #2882E3;
+}
+
+.left p{
+    margin: 40px 0;
+}
+
+.left-btn{
+    background-color: #2882E3;
+    color: white;
+    width: 200px;
+    padding: 8px;
+    border-radius: 60px;
+    border: none;
+    transition: all 0.3s;
+}
+
+.left-btn:hover{
+    background-color: #00CCFF;
+}
+
+.example-left{
+    width: 700px;
+}
+
+.example-img{
+    width: 100%;
+}
+
+.example-text{
+    width: 700px;
+    padding-right: 0px;
+}
+
+.games-2024{
+    margin-top: 50px;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 80px;
+    overflow: hidden;
+}
+
+.games-list-2024{
+  width: 100%;
+  align-items: center;
+}
+
+.mg2024{
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.g2024{
+  margin: 25px;
+  width: 30%;
+}
+
+.best2024GamesTittle{
+    font-size: 4.5rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 80px;
+}
+
+/*Media queries*/
+
+@media(max-width: 900px){
+  .main-content{
+    flex-direction: column;
+    margin: 0;
+    margin-bottom: 250px;
+  }
+
+  .left{
+    width: 100%;
+    padding-top: 130px;
+  }
+
+
+  .logo-img{
+    width: 100%;
+  }
+
+  .g2024{
+    width: 80%;
+  }
+}
+
+@media(max-width: 650px){
+  .left h1{
+    font-size: 55px;
+  }
+  .main-content{
+    margin-bottom: 100px;
+  }
+}
