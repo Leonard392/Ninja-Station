@@ -31,7 +31,8 @@ if db_url is not None:
     app.config['SQLALCHEMY_DATABASE_URI'] = db_url.replace(
         "postgres://", "postgresql://")
 else:
-    app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:////test.db"
+    local_database = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'test.db'))
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{local_database}"
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 MIGRATE = Migrate(app, db, compare_type=True)

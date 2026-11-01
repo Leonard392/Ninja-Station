@@ -31,11 +31,12 @@ export const getState = ({ getStore, getActions, setStore }) => {
 						body: JSON.stringify({ username, password })
 					});
 
+					const data = await response.json();
 					if (!response.ok) {
-						throw new Error('Failed to sign up');
+						throw new Error(data.message || 'Failed to sign up');
 					}
 
-					const data = await response.json();
+
 					const currentToken = data.access_token;
 					localStorage.setItem('token', currentToken);
 					setStore({ token: currentToken });
@@ -61,11 +62,12 @@ export const getState = ({ getStore, getActions, setStore }) => {
 					});
 
 					// Verifica si la solicitud fue exitosa
+					const data = await response.json();
 					if (!response.ok) {
-						throw new Error('Failed to log in.');
+						throw new Error(data.message || 'Failed to log in');
 					}
 
-					const data = await response.json();
+
 					const currentToken = data.access_token;
 					localStorage.setItem('token', currentToken);
 					setStore({ token: currentToken });

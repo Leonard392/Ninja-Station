@@ -18,6 +18,14 @@ api = Blueprint('api', __name__)
 IGDB_ACCESS_TOKEN = None
 
 
+def get_current_user_id():
+    identity = get_jwt_identity()
+    try:
+        return int(identity)
+    except (TypeError, ValueError):
+        return None
+
+
 def get_igdb_access_token():
     global IGDB_ACCESS_TOKEN
     if IGDB_ACCESS_TOKEN:
@@ -261,7 +269,7 @@ def create_token():
 
 @api.route('/signup', methods=['POST'])
 def sign_up():
-    data = request.json
+    data = request.get_json(silent=True) or {}
     username = data.get('username')
     password = data.get('password')
     
@@ -271,12 +279,12 @@ def sign_up():
     if User.query.filter_by(username=username).first():
         return jsonify({"message": "Username already exists"}), 409
     
-    hashed_password = generate_password_hash(password)
+    hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
     new_user = User(username=username, password=hashed_password, is_active=True)
     db.session.add(new_user)
     db.session.commit()
 
-    access_token = create_access_token(identity=new_user.id)
+    access_token = create_access_token(identity=str(new_user.id))
     
     return jsonify({
     "message": "User created successfully",
@@ -285,7 +293,7 @@ def sign_up():
 
 @api.route('/login', methods=['POST'])
 def login():
-    data = request.json
+    data = request.get_json(silent=True) or {}
     username = data.get('username')
     password = data.get('password')
     
@@ -296,7 +304,7 @@ def login():
     if not user or not check_password_hash(user.password, password):
         return jsonify({"message": "Invalid username or password"}), 401
     
-    access_token = create_access_token(identity=user.id)
+    access_token = create_access_token(identity=str(user.id))
     
     return jsonify({"access_token": access_token}), 200
 
@@ -313,7 +321,7 @@ def logout():
 @jwt_required()
 def add_game_to_favorites():
     try:
-        user_id = get_jwt_identity()
+        user_id = get_current_user_id()
         data = request.json
         game_id = data.get('game_id')
         
@@ -340,7 +348,7 @@ def add_game_to_favorites():
 @api.route('/favorites/games/<int:game_id>', methods=['DELETE'])
 @jwt_required()
 def remove_game_from_favorites(game_id):
-    user_id = get_jwt_identity()
+    user_id = get_current_user_id()
     
     user = User.query.get(user_id)
     
@@ -358,7 +366,7 @@ def remove_game_from_favorites(game_id):
 @api.route('/favorites/games', methods=['GET'])
 @jwt_required()
 def get_user_game_favorites():
-    user_id = get_jwt_identity()
+    user_id = get_current_user_id()
     user = User.query.get(user_id)
     
     user_game_favorites = [game.game_id for game in user.favorite_games]
@@ -371,7 +379,7 @@ def get_user_game_favorites():
 @jwt_required()
 def add_creator_to_favorites():
     try:
-        user_id = get_jwt_identity()
+        user_id = get_current_user_id()
         data = request.json
         creator_id = data.get('creator_id')
         
@@ -398,7 +406,7 @@ def add_creator_to_favorites():
 @api.route('/favorites/creators/<int:creator_id>', methods=['DELETE'])
 @jwt_required()
 def remove_creator_from_favorites(creator_id):
-    user_id = get_jwt_identity()
+    user_id = get_current_user_id()
     
     user = User.query.get(user_id)
     
@@ -416,7 +424,7 @@ def remove_creator_from_favorites(creator_id):
 @api.route('/favorites/creators', methods=['GET'])
 @jwt_required()
 def get_user_creator_favorites():
-    user_id = get_jwt_identity()
+    user_id = get_current_user_id()
     user = User.query.get(user_id)
     
     user_creator_favorites = [creator.creator_id for creator in user.favorite_creators]
@@ -430,7 +438,7 @@ def get_user_creator_favorites():
 @jwt_required()
 def add_platform_to_favorites():
     try:
-        user_id = get_jwt_identity()
+        user_id = get_current_user_id()
         data = request.json
         platform_id = data.get('platform_id')
         
@@ -457,7 +465,7 @@ def add_platform_to_favorites():
 @api.route('/favorites/platforms/<int:platform_id>', methods=['DELETE'])
 @jwt_required()
 def remove_platform_from_favorites(platform_id):
-    user_id = get_jwt_identity()
+    user_id = get_current_user_id()
     
     user = User.query.get(user_id)
     
@@ -475,7 +483,7 @@ def remove_platform_from_favorites(platform_id):
 @api.route('/favorites/platforms', methods=['GET'])
 @jwt_required()
 def get_user_platform_favorites():
-    user_id = get_jwt_identity()
+    user_id = get_current_user_id()
     user = User.query.get(user_id)
     
     user_platform_favorites = [platform.platform_id for platform in user.favorite_platforms]
