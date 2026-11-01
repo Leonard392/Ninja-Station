@@ -11,21 +11,21 @@ export const NavbarSignedIn = () => {
 				</Link>
 
 				<div className="ml-auto">
-					<div class="dropdown signup-link">
+					<div className="dropdown signup-link">
   						<button className="btn-profile btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
 					  		<img src={ProfilePic} className="profile-img "/>
   						</button>
-  					
- 				 		<ul class="dropdown-menu">
+
+							<ul className="dropdown-menu">
    				 			<li>
 								<Link to="/profile">
 									<p>My Games</p>
-								</Link>	
+								</Link>
 							</li>
 							<li>
 								<Link  to="/profile">
 									<p>WishList</p>
-								</Link>	
+								</Link>
 							</li>
 				  		</ul>
 					</div>

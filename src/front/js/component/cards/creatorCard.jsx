@@ -3,7 +3,7 @@ import { useContext, useEffect } from "react";
 import { Context } from "../../store/Context";
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
-import "../../../styles/card.css"
+import "../../../styles/card.css";
 
 export const CreatorCard = ({ creator }) => {
 
@@ -11,7 +11,7 @@ export const CreatorCard = ({ creator }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-      actions.fetchUserFavoriteCreators()
+      actions.fetchUserFavoriteCreators();
   }, []);
 
   const handleAddToFavorites = async (creator) => {
@@ -56,11 +56,11 @@ export const CreatorCard = ({ creator }) => {
         </Link>
         {isCreatorInFavorites(creator.id) ? (
           <button className="btn card-btn" onClick={() => handleRemoveFromFavorites(creator.id)}>
-            <i class="fa-solid fa-heart"></i>
+            <i className="fa-solid fa-heart"></i>
           </button>
         ) : (
           <button className="btn card-btn" onClick={() => handleAddToFavorites(creator)}>
-            <i class="fa-regular fa-heart"></i>
+            <i className="fa-regular fa-heart"></i>
           </button>
         )}
         </div>

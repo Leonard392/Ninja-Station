@@ -10,7 +10,7 @@ export const FavoriteCreators = () => {
     const { store, actions } = useContext(Context);
 
     useEffect(() => {
-        actions.fetchUserFavoriteCreators()
+        actions.fetchUserFavoriteCreators();
     }, []);
 
     return (
@@ -30,5 +30,5 @@ export const FavoriteCreators = () => {
                     </div>
                 </div>
             </div>
-        )
+        );
 };

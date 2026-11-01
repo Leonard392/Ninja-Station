@@ -1,12 +1,12 @@
 import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "../../styles/genres.css"
+import "../../styles/genres.css";
 
 export const Sidebar = () => {
 
     return(
-    <div class="sidebar-games d-flex flex-column flex-shrink-0 p-3 side">
-          <ul class="nav nav-pills flex-column mb-auto">
+    <div className="sidebar-games d-flex flex-column flex-shrink-0 p-3 side">
+          <ul className="nav nav-pills flex-column mb-auto">
           <li className="nav-item sidebar-li">
               <Link to="/genres/action" className="sidebar-link">
                 <p className="sidebar-text">ACTION</p>
@@ -69,5 +69,5 @@ export const Sidebar = () => {
             </li>
           </ul>
     </div>
-    )
-}
+    );
+};

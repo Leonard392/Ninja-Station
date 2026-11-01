@@ -3,7 +3,7 @@ import { useContext, useEffect } from "react";
 import { Context } from "../../store/Context";
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
-import "../../../styles/card.css"
+import "../../../styles/card.css";
 
 
 export const Platformcard = ({ platform }) => {
@@ -12,7 +12,7 @@ export const Platformcard = ({ platform }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    actions.fetchUserFavoritePlatforms()
+    actions.fetchUserFavoritePlatforms();
   }, []);
 
   const handleAddToFavorites = async (platform) => {
@@ -56,11 +56,11 @@ export const Platformcard = ({ platform }) => {
         </Link>
         {isPlatformInFavorites(platform.id) ? (
           <button className="btn card-btn" onClick={() => handleRemoveFromFavorites(platform.id)}>
-            <i class="fa-solid fa-heart"></i>
+            <i className="fa-solid fa-heart"></i>
           </button>
         ) : (
           <button className="btn card-btn" onClick={() => handleAddToFavorites(platform)}>
-            <i class="fa-regular fa-heart"></i>
+            <i className="fa-regular fa-heart"></i>
           </button>
         )}
         </div>

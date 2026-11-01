@@ -4,7 +4,7 @@ import "../../../styles/details.css";
 
 
 export const StoreDetails = ({ gameId }) => {
-    const params = useParams()
+    const params = useParams();
 
     const [storeDetails, setStoreDetails] = useState(null);
 
@@ -14,7 +14,7 @@ export const StoreDetails = ({ gameId }) => {
         fetch(url)
             .then(response => response.json())
             .then(data => setStoreDetails(data))
-            .catch(err => err)
+            .catch(err => err);
     }, []);
 
     return (
@@ -29,8 +29,8 @@ export const StoreDetails = ({ gameId }) => {
                         {/* Detalles de la plataforma */}
                         <h1><strong>STORE</strong> DETAILS</h1>
                         <h2>{storeDetails.name}</h2>
-                        <p><strong><i class="fa-solid fa-gamepad"></i> Games Count:</strong> {storeDetails.games_count}</p>
-                        <p><strong><i class="fa-solid fa-globe"></i> You can find us:</strong> {storeDetails.domain}</p>
+                        <p><strong><i className="fa-solid fa-gamepad"></i> Games Count:</strong> {storeDetails.games_count}</p>
+                        <p><strong><i className="fa-solid fa-globe"></i> You can find us:</strong> {storeDetails.domain}</p>
                     </div>
                 </>
             ) : (

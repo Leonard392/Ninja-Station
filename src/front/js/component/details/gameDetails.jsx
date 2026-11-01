@@ -28,11 +28,11 @@ export const GameDetails = ({ gameId }) => {
                         {/* Detalles del juego */}
                         <h1><span>GAME</span> DETAILS</h1>
                         <h2 className="details-title">{gameDetails.name}</h2>
-                        <p><strong><i class="fa-solid fa-clock"></i>  Release Date:</strong> {gameDetails.released}</p>
-                        <p><strong><i class="fa-solid fa-desktop"></i> Platforms:</strong> {gameDetails.platforms.map(platform => platform.platform.name).join(', ')}</p>
-                        <p><strong><i class="fa-solid fa-gear"></i> Developers:</strong> {gameDetails.developers.map(developer => developer.name).join(', ')}</p>
-                        <p><strong><i class="fa-solid fa-gamepad"></i> Genres:</strong> {gameDetails.genres.map(genre => genre.name).join(', ')}</p>
-                        <p><strong><i class="fa-solid fa-globe"></i> Publisher:</strong> {gameDetails.publishers.map(publisher => publisher.name).join(', ')}</p>
+                        <p><strong><i className="fa-solid fa-clock"></i>  Release Date:</strong> {gameDetails.released}</p>
+                        <p><strong><i className="fa-solid fa-desktop"></i> Platforms:</strong> {gameDetails.platforms.map(platform => platform.platform.name).join(', ')}</p>
+                        <p><strong><i className="fa-solid fa-gear"></i> Developers:</strong> {gameDetails.developers.map(developer => developer.name).join(', ')}</p>
+                        <p><strong><i className="fa-solid fa-gamepad"></i> Genres:</strong> {gameDetails.genres.map(genre => genre.name).join(', ')}</p>
+                        <p><strong><i className="fa-solid fa-globe"></i> Publisher:</strong> {gameDetails.publishers.map(publisher => publisher.name).join(', ')}</p>
 
                         {/* Puedes agregar más detalles del juego según sea necesario */}
                     </div>

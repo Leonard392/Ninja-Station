@@ -3,14 +3,14 @@ import { useContext, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Context } from "../../store/Context";
 import { useNavigate } from 'react-router-dom';
-import "../../../styles/card.css"
+import "../../../styles/card.css";
 
 export const GameCard = ({ game, fowardRef }) => {
     const { store, actions } = useContext(Context);
     const navigate = useNavigate();
 
     useEffect(() => {
-        actions.fetchUserFavoriteGames()
+        actions.fetchUserFavoriteGames();
     }, []);
   
     const handleAddToFavorites = async (game) => {
@@ -52,11 +52,11 @@ export const GameCard = ({ game, fowardRef }) => {
                         </Link>
                         {isGameInFavorites(game.id) ? (
                             <button className="btn card-btn" onClick={() => handleRemoveFromFavorites(game.id)}>
-                                <i class="fa-solid fa-heart"></i>
+                                <i className="fa-solid fa-heart"></i>
                             </button>
                         ) : (
                             <button className="btn card-btn" onClick={() => handleAddToFavorites(game)}>
-                                <i class="fa-regular fa-heart"></i>
+                                <i className="fa-regular fa-heart"></i>
                             </button>
                         )}
                         </div>

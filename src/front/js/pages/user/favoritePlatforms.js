@@ -10,7 +10,7 @@ export const FavoritePlatforms = () => {
     const { store, actions } = useContext(Context);
 
     useEffect(() => {
-        actions.fetchUserFavoritePlatforms()
+        actions.fetchUserFavoritePlatforms();
     }, []);
 
     return (
@@ -30,5 +30,5 @@ export const FavoritePlatforms = () => {
                 </div>
             </div>
         </div>
-    )
+    );
 };

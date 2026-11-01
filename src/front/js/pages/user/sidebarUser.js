@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 export const SidebarUser = () => {
 
     return(
-    <div class="sidebar-games d-flex flex-column flex-shrink-0 p-3 side">
-          <ul class="nav nav-pills flex-column mb-auto">
+    <div className="sidebar-games d-flex flex-column flex-shrink-0 p-3 side">
+          <ul className="nav nav-pills flex-column mb-auto">
           <li className="nav-item sidebar-li">
               <Link to="/favorites/games" className="sidebar-link">
                 <p className="sidebar-text">WISH LIST</p>
@@ -23,5 +23,5 @@ export const SidebarUser = () => {
             </li>
           </ul>
     </div>
-    )
-}
+    );
+};

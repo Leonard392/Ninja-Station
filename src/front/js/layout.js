@@ -20,7 +20,7 @@ import { FavoriteCreators} from "./pages/user/favoriteCreators.js";
 
 //import genres view
 import { Action } from "./pages/genres/action.js";
-import { Adventure} from "./pages/genres/adventure.js"
+import { Adventure} from "./pages/genres/adventure.js";
 import { Arcade } from "./pages/genres/arcade.js";
 import { Casual } from "./pages/genres/casual.js";
 import { Fighting } from "./pages/genres/fighting.js";

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState, useCallback, useRef } from "react";
 import { Context } from "../../store/Context.js";
-import { GameCard } from "../../component/cards/gameCard.jsx"
+import { GameCard } from "../../component/cards/gameCard.jsx";
 import { Sidebar } from "../../component/sidebar.jsx";
 import "../../../styles/genres.css";
 
@@ -18,11 +18,11 @@ export const Simulation = () => {
     observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting){
             console.log(entries[0]);
-            setPage(page => page && page+1)
+            setPage(page => page && page+1);
         }
-    }, {threshold: 1})
+    }, {threshold: 1});
     if (node) observer.current.observe(node);
-    }, [loading])
+    }, [loading]);
 
     const getGames = () =>{
         setLoading(true);
@@ -37,7 +37,7 @@ export const Simulation = () => {
                     setLoading(false);
             })
             .catch(err => console.error(err)); // Log error to console
-    }
+    };
 
 
     useEffect(() => {

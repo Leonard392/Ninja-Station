@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { Context } from "../../store/Context.js";
-import { CreatorCard } from "../../component/cards/creatorCard.jsx"
-import "../../../styles/others.css"
+import { CreatorCard } from "../../component/cards/creatorCard.jsx";
+import "../../../styles/others.css";
 
 export const Creators = () => {
   const { store, actions } = useContext(Context);

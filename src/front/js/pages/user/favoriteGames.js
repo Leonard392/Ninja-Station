@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useContext } from "react";
 import { Context } from "../../store/Context";
-import { GameCard } from "../../component/cards/gameCard.jsx"
+import { GameCard } from "../../component/cards/gameCard.jsx";
 import { SidebarUser } from "./sidebarUser.js";
 import "../../../styles/genres.css";
 
@@ -10,7 +10,7 @@ export const FavoriteGames = () => {
     const { store, actions } = useContext(Context);
 
     useEffect(() => {
-        actions.fetchUserFavoriteGames()
+        actions.fetchUserFavoriteGames();
     }, []);
 
     return (
@@ -30,5 +30,5 @@ export const FavoriteGames = () => {
                 </div>
             </div>
         </div>
-    )
+    );
 };

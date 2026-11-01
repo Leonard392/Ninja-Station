@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { Context } from "../store/Context.js";
 import { GameCard } from "./cards/gameCard.jsx";
-import "../../styles/home.css"
+import "../../styles/home.css";
 
 export const TopGames = () => {
   const { store } = useContext(Context);

@@ -16,8 +16,8 @@ export const Home = () => {
 			
 			<div className="main-content">
 				<div className="left">
-					<h1>Let's Get Some <span>Video Games</span></h1>
-					<p>Welcome to our online video game web app! Dive into a world where gaming dreams come true. With a curated selection of the latest titles and beloved classics, we cater to every gamer's taste.</p>
+					<h1>Let&apos;s Get Some <span>Video Games</span></h1>
+					<p>Welcome to our online video game web app! Dive into a world where gaming dreams come true. With a curated selection of the latest titles and beloved classics, we cater to every gamer&apos;s taste.</p>
 					<Link to="/profile">
 						<button className="left-btn">BUY NOW</button>
 					</Link>
