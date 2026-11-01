@@ -191,7 +191,8 @@ def proxy_igdb(rawg_path):
             query = f"fields id,name,slug,summary,storyline,cover.image_id,first_release_date,rating,platforms.name,genres.name,involved_companies.company.name,involved_companies.developer,involved_companies.publisher;{where} sort first_release_date desc; limit {limit}; offset {offset};"
             games = igdb_request("games", query)
             results = [normalize_game(game) for game in games]
-            return jsonify({"count": len(results), "next": None, "previous": None, "results": results}), 200
+            next_page = page + 1 if len(results) == limit else None
+            return jsonify({"count": len(results), "next": next_page, "previous": page - 1 if page > 1 else None, "results": results}), 200
 
         if resource == 'creators':
             parts = rawg_path.split('/')
@@ -202,7 +203,8 @@ def proxy_igdb(rawg_path):
                 return jsonify(normalize_company(companies[0])), 200
             companies = igdb_request("companies", f"fields id,name,slug,description,logo.image_id; sort name asc; limit {limit}; offset {offset};")
             results = [normalize_company(company) for company in companies]
-            return jsonify({"count": len(results), "next": None, "previous": None, "results": results}), 200
+            next_page = page + 1 if len(results) == limit else None
+            return jsonify({"count": len(results), "next": next_page, "previous": page - 1 if page > 1 else None, "results": results}), 200
 
         if resource == 'platforms':
             parts = rawg_path.split('/')
@@ -213,7 +215,8 @@ def proxy_igdb(rawg_path):
                 return jsonify(normalize_platform(platforms[0])), 200
             platforms = igdb_request("platforms", f"fields id,name,slug,summary,platform_logo.image_id; sort name asc; limit {limit}; offset {offset};")
             results = [normalize_platform(platform) for platform in platforms]
-            return jsonify({"count": len(results), "next": None, "previous": None, "results": results}), 200
+            next_page = page + 1 if len(results) == limit else None
+            return jsonify({"count": len(results), "next": next_page, "previous": page - 1 if page > 1 else None, "results": results}), 200
 
         if resource == 'stores':
             parts = rawg_path.split('/')
@@ -234,7 +237,8 @@ def proxy_igdb(rawg_path):
             return jsonify({"count": len(stores), "next": None, "previous": None, "results": stores}), 200
 
         genres = igdb_request("genres", f"fields id,name,slug; sort name asc; limit {limit}; offset {offset};")
-        return jsonify({"count": len(genres), "next": None, "previous": None, "results": genres}), 200
+        next_page = page + 1 if len(genres) == limit else None
+        return jsonify({"count": len(genres), "next": next_page, "previous": page - 1 if page > 1 else None, "results": genres}), 200
 
     except ValueError as error:
         return jsonify({"message": str(error)}), 503

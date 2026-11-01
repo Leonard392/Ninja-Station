@@ -17,10 +17,9 @@ export const Simulation = () => {
         if (observer.current) observer.current.disconnect();
     observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting){
-            console.log(entries[0]);
-            setPage(page => page && page+1);
+             setPage(page => page && page+1);
         }
-    }, {threshold: 1});
+    }, {threshold: 0.1, rootMargin: "300px"});
     if (node) observer.current.observe(node);
     }, [loading]);
 
@@ -33,10 +32,17 @@ export const Simulation = () => {
                 if (!data.next){
                     setPage(null);
                 }
-                    setGames((currentGamesList) => [...currentGamesList, ...data.results]);
+                    setGames(currentGamesList => {
+                        const existingIds = new Set(currentGamesList.map(game => game.id));
+                        const uniqueGames = Array.isArray(data.results) ? data.results.filter(game => !existingIds.has(game.id)) : [];
+                        return [...currentGamesList, ...uniqueGames];
+                    });
                     setLoading(false);
             })
-            .catch(err => console.error(err)); // Log error to console
+                    .catch(err => {
+                        setLoading(false);
+                        console.error(err);
+                    }); // Log error to console
     };
 
 

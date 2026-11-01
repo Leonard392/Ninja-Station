@@ -15,7 +15,11 @@ export const getState = ({ getStore, getActions, setStore }) => {
 			favoritesPlatforms: [],
 			bestGames2024: [],
 			topCreators: [],
+			topCreatorsNextPage: null,
+			topCreatorsLoading: false,
 			Platforms: [],
+			platformsNextPage: null,
+			platformsLoading: false,
 			Stores: []
 		},
 		actions: {
@@ -416,22 +420,66 @@ export const getState = ({ getStore, getActions, setStore }) => {
 			},
 			fetchTopCreators: async () => {
 				try {
-					const response = await fetch(`/api/igdb/creators?page_size=${PAGE_SIZE}`);
+					const response = await fetch(`/api/igdb/creators?page=1&page_size=${PAGE_SIZE}`);
 					const data = await response.json();
-					setStore({ topCreators: response.ok && Array.isArray(data.results) ? data.results : [] });
+					setStore({
+						topCreators: response.ok && Array.isArray(data.results) ? data.results : [],
+						topCreatorsNextPage: response.ok ? data.next : null
+					});
 				} catch (error) {
-					setStore({ topCreators: [] });
+					setStore({ topCreators: [], topCreatorsNextPage: null });
 					console.error('Error fetching top creators', error);
+				}
+			},
+			fetchMoreTopCreators: async () => {
+				const current = getStore();
+				if (!current.topCreatorsNextPage || current.topCreatorsLoading) return;
+				setStore({ topCreatorsLoading: true });
+				try {
+					const response = await fetch(`/api/igdb/creators?page=${current.topCreatorsNextPage}&page_size=${PAGE_SIZE}`);
+					const data = await response.json();
+					if (response.ok && Array.isArray(data.results)) {
+						const existingIds = new Set(getStore().topCreators.map(item => item.id));
+						const uniqueResults = data.results.filter(item => !existingIds.has(item.id));
+						setStore({ topCreators: [...getStore().topCreators, ...uniqueResults], topCreatorsNextPage: data.next, topCreatorsLoading: false });
+					} else {
+						setStore({ topCreatorsNextPage: null, topCreatorsLoading: false });
+					}
+				} catch (error) {
+					setStore({ topCreatorsLoading: false, topCreatorsNextPage: null });
+					console.error('Error fetching more creators', error);
 				}
 			},
 			fetchPlatforms: async () => {
 				try {
-					const response = await fetch(`/api/igdb/platforms?page_size=${PAGE_SIZE}`);
+					const response = await fetch(`/api/igdb/platforms?page=1&page_size=${PAGE_SIZE}`);
 					const data = await response.json();
-					setStore({ Platforms: response.ok && Array.isArray(data.results) ? data.results : [] });
+					setStore({
+						Platforms: response.ok && Array.isArray(data.results) ? data.results : [],
+						platformsNextPage: response.ok ? data.next : null
+					});
 				} catch (error) {
-					setStore({ Platforms: [] });
+					setStore({ Platforms: [], platformsNextPage: null });
 					console.error('Error fetching top platforms', error);
+				}
+			},
+			fetchMorePlatforms: async () => {
+				const current = getStore();
+				if (!current.platformsNextPage || current.platformsLoading) return;
+				setStore({ platformsLoading: true });
+				try {
+					const response = await fetch(`/api/igdb/platforms?page=${current.platformsNextPage}&page_size=${PAGE_SIZE}`);
+					const data = await response.json();
+					if (response.ok && Array.isArray(data.results)) {
+						const existingIds = new Set(getStore().Platforms.map(item => item.id));
+						const uniqueResults = data.results.filter(item => !existingIds.has(item.id));
+						setStore({ Platforms: [...getStore().Platforms, ...uniqueResults], platformsNextPage: data.next, platformsLoading: false });
+					} else {
+						setStore({ platformsNextPage: null, platformsLoading: false });
+					}
+				} catch (error) {
+					setStore({ platformsLoading: false, platformsNextPage: null });
+					console.error('Error fetching more platforms', error);
 				}
 			},
 			fetchStores: async () => {
