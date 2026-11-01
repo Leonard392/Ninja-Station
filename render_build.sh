@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
-# exit on error
 set -o errexit
 
 npm install
 npm run build
 
-pipenv install
-
+python -m pip install --upgrade pip setuptools wheel pipenv
+pipenv install --python "$(command -v python3)"
 pipenv run upgrade
