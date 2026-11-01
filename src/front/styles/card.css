@@ -1,8 +1,40 @@
 .card{
+    width: 100%;
+    height: 430px;
     background-color: #31363F;
-    border-radius: 12px;
-    overflow: hidden; 
+    border-radius: 8px;
+    overflow: hidden;
     transition: all 0.4s;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-img,
+.card-img-top{
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    object-position: center;
+    flex-shrink: 0;
+}
+
+.card-body{
+    min-height: 210px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.card-title{
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.15;
+}
+
+.card-text{
+    margin-bottom: 6px;
 }
 
 .card:hover{
@@ -24,9 +56,11 @@
 }
 
 .cards-btns{
+    margin-top: auto;
     margin-bottom: 0px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .card-btn{
@@ -47,4 +81,23 @@
 
 .learnMoreBtn:hover{
     color: white;
+}
+
+@media (max-width: 575px){
+    .card{
+        height: 390px;
+    }
+
+    .card-img,
+    .card-img-top{
+        height: 180px;
+    }
+
+    .card-body{
+        min-height: 210px;
+    }
+
+    .learnMoreBtn{
+        font-size: 1.1rem;
+    }
 }
