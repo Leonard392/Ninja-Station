@@ -7,7 +7,9 @@ export const TopGames = () => {
   const { store } = useContext(Context);
 
   // Only render the first 6 top games
-  const sixTopGames = store.bestGames2024.slice(0,6);
+  const sixTopGames = Array.isArray(store.bestGames2024)
+    ? store.bestGames2024.slice(0, 6)
+    : [];
 
   return (
     <div className="games-2024">

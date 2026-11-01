@@ -29,6 +29,9 @@ module.exports = merge(common, {
         static: {
           directory: path.resolve(__dirname, "dist"),
         },
+        proxy: {
+          '/api': 'http://localhost:3001'
+        },
         client: {
           webSocketURL: publicUrl
         },

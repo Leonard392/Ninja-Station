@@ -163,7 +163,7 @@ def proxy_igdb(rawg_path):
             if genre_slug:
                 genre_rows = igdb_request("genres", f"fields id,name,slug; where slug = \"{genre_slug}\"; limit 1;")
                 if genre_rows:
-                    where = f" where genres = ({genre_rows[0]['id']})"
+                    where = f" where genres = ({genre_rows[0]['id']});"
 
             if params.get('dates'):
                 year_start, year_end = params['dates'].split(',')[0:2] if ',' in params['dates'] else (params['dates'], params['dates'])
@@ -172,13 +172,13 @@ def proxy_igdb(rawg_path):
                     start = calendar.timegm(time.strptime(year_start, "%Y-%m-%d")) if '-' in year_start else int(year_start) * 0
                     end = calendar.timegm(time.strptime(year_end, "%Y-%m-%d")) if '-' in year_end else 0
                     if start and end:
-                        date_where = f" where first_release_date >= {start} & first_release_date <= {end}"
+                        date_where = f" where first_release_date >= {start} & first_release_date <= {end};"
                         where = date_where
                 except ValueError:
                     pass
 
             if not params.get('dates'):
-                where = where or " where first_release_date != null"
+                where = where or " where first_release_date != null;"
 
             query = f"fields id,name,slug,summary,storyline,cover.image_id,first_release_date,rating,platforms.name,genres.name,involved_companies.company.name,involved_companies.developer,involved_companies.publisher;{where} sort first_release_date desc; limit {limit}; offset {offset};"
             games = igdb_request("games", query)

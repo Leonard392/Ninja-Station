@@ -404,42 +404,42 @@ export const getState = ({ getStore, getActions, setStore }) => {
 
 			fetchBestGames2024: async () => {
 				try {
-					// Fetch best games of 2024 from the API
 					const response = await fetch(`/api/igdb/games?dates=2024-01-01,2024-12-31&ordering=-added&page_size=${PAGE_SIZE}`);
 					const data = await response.json();
-					setStore({ bestGames2024: data.results });
+					setStore({ bestGames2024: response.ok && Array.isArray(data.results) ? data.results : [] });
 				} catch (error) {
+					setStore({ bestGames2024: [] });
 					console.error('Error fetching best games of 2024', error);
 				}
 			},
 			fetchTopCreators: async () => {
 				try {
-					// Fetch top creators from the API
 					const response = await fetch(`/api/igdb/creators?page_size=${PAGE_SIZE}`);
 					const data = await response.json();
-					setStore({ topCreators: data.results });
+					setStore({ topCreators: response.ok && Array.isArray(data.results) ? data.results : [] });
 				} catch (error) {
+					setStore({ topCreators: [] });
 					console.error('Error fetching top creators', error);
 				}
 			},
 			fetchPlatforms: async () => {
 				try {
-					// Fetch top platforms from the API
 					const response = await fetch(`/api/igdb/platforms?page_size=${PAGE_SIZE}`);
 					const data = await response.json();
-					setStore({ Platforms: data.results });
+					setStore({ Platforms: response.ok && Array.isArray(data.results) ? data.results : [] });
 				} catch (error) {
-					console.error('Error fetching top creators', error);
+					setStore({ Platforms: [] });
+					console.error('Error fetching top platforms', error);
 				}
 			},
 			fetchStores: async () => {
 				try {
-					// Fetch top stores from the API
 					const response = await fetch(`/api/igdb/stores?page_size=${PAGE_SIZE}`);
 					const data = await response.json();
-					setStore({ Stores: data.results });
+					setStore({ Stores: response.ok && Array.isArray(data.results) ? data.results : [] });
 				} catch (error) {
-					console.error('Error fetching top creators', error);
+					setStore({ Stores: [] });
+					console.error('Error fetching top stores', error);
 				}
 			}
 		}
