@@ -1,214 +1,208 @@
-li{
-    list-style: none;
+li {
+  list-style: none;
 }
 
-header{
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
-.naV-link{
-    text-decoration: none;
-    color: #000026;
-    font-size: 1rem;
+.naV-link {
+  text-decoration: none;
+  color: #000026;
+  font-size: 1rem;
 }
 
-.header{
-    position: relative;
-    padding: 0 2rem;
+.header {
+  position: relative;
+  padding: 0 2rem;
 }
 
-.navBar{
-    background-color: #fff;
-    width: 100%;
-    height: 120px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-      
-ul{
-    margin-bottom: 0;
+.navBar {
+  background-color: #fff;
+  width: 100%;
+  height: 120px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.logo{
-    padding-left: 20px;
+ul {
+  margin-bottom: 0;
 }
 
-.link-logo{
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-decoration: none;
-    color: #000026;
+.logo {
+  padding-left: 20px;
 }
 
-.link-logo h1 span{
-    color: #00CCFF;
+.link-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: #000026;
 }
 
-.link-logo:hover{
-    color: #000026;
+.link-logo h1 span {
+  color: #00ccff;
 }
 
-.navBar .links{
-    display: flex;
-    gap: 2rem;
+.link-logo:hover {
+  color: #000026;
 }
 
-.toggle_btn{
-    color: black;
-    font-size: 2.5rem;
-    cursor: pointer;
-    display: none;
+.navBar .links {
+  display: flex;
+  gap: 2rem;
 }
 
-.action_btn{
-    padding: 8px 14px;
-    margin: 0;
-    border: none;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s;
+.toggle_btn {
+  color: black;
+  font-size: 2.5rem;
+  cursor: pointer;
+  display: none;
 }
 
-.login-btn{
-    color: #000026;
-    background-color: transparent;
-    margin-right: 20px;
-    border: 1px solid #000026;
+.action_btn {
+  padding: 8px 14px;
+  margin: 0;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
 }
 
-.login-btn:hover{
-    background-color:#000026;
-    color: #00CCFF;
+.login-btn {
+  color: #000026;
+  background-color: transparent;
+  margin-right: 20px;
+  border: 1px solid #000026;
 }
 
-.signup-btn{
-    background-color:#000026;
-    color: white;
-    margin-right: 30px;
+.login-btn:hover {
+  background-color: #000026;
+  color: #00ccff;
 }
 
-.signup-btn:hover{
-    background-color: #00CCFF;
+.signup-btn {
+  background-color: #000026;
+  color: white;
+  margin-right: 30px;
+}
+
+.signup-btn:hover {
+  background-color: #00ccff;
 }
 
 /*DROPDOWN MENU*/
 
-.Dropdown_menu{
-    display: none;
-    position: absolute;
-    right: 2rem;
-    top: 60px;
-    height: 0;
-    width: 300px;
-    background: rgb(255, 255, 255, 0.1);
-    backdrop-filter: blur(15px);
-    border-radius: 10px;
-    overflow: hidden;
-    transition: all 0.2s;
+.Dropdown_menu {
+  display: none;
+  position: absolute;
+  right: 2rem;
+  top: 60px;
+  height: 0;
+  width: 300px;
+  background: rgb(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.2s;
 }
 
-.Dropdown_menu.open{
-    z-index: 1;
-    height: 346px;
+.Dropdown_menu.open {
+  z-index: 1;
+  height: 346px;
 }
 
-.Dropdown_menu ul{
-    padding: 0;
+.Dropdown_menu ul {
+  padding: 0;
 }
 
-.Dropdown_menu li{
-    padding: 0.7rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.Dropdown_menu li {
+  padding: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.dropdown-h4{
-    color: #2882E3;
-    transition: all 0.3s;
+.dropdown-h4 {
+  color: #2882e3;
+  transition: all 0.3s;
 }
 
-.dropdown-h4:hover{
-    color: #00CCFF;
+.dropdown-h4:hover {
+  color: #00ccff;
 }
 
 .Dropdown_menu .naV-btn,
-.Dropdown_menu .action_btn{
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    text-decoration: none;
-    margin: 0;
-    margin-top: 10px;
-    font-size: 1.2rem;
+.Dropdown_menu .action_btn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+  margin: 0;
+  margin-top: 10px;
+  font-size: 1.2rem;
 }
 
-
-.Dropdown_menu .signup-login .signup-login-link{
-    text-decoration: none;
-    
+.Dropdown_menu .signup-login .signup-login-link {
+  text-decoration: none;
 }
 
-.Dropdown_menu .login-btn{
-    color: #00CCFF;
+.Dropdown_menu .login-btn {
+  color: #00ccff;
 }
 
-.Dropdown_menu .logout-btn{
-    margin-top: 63px;
-    color: #00CCFF;
-    background: transparent;
-    border: 1px solid #000026;
+.Dropdown_menu .logout-btn {
+  margin-top: 63px;
+  color: #00ccff;
+  background: transparent;
+  border: 1px solid #000026;
 }
 
-
-.Dropdown_menu .login-btn:hover{
-    background-color: #00CCFF;
-    color: white;
-    border: none;
+.Dropdown_menu .login-btn:hover {
+  background-color: #00ccff;
+  color: white;
+  border: none;
 }
 
-.Dropdown_menu .logout-btn:hover{
-    margin-top: 63px;
-    background-color: #00CCFF;
-    color: white;
+.Dropdown_menu .logout-btn:hover {
+  margin-top: 63px;
+  background-color: #00ccff;
+  color: white;
 }
 
+@media (max-width: 1500px) {
+  .navBar .links {
+    margin-right: 0;
+  }
 
-@media(max-width:1500px){
+  .signup-btn {
+    margin-left: 80px;
+  }
 
-    .navBar .links{
-        margin-right: 0;
-    }
-
-    .signup-btn{
-        margin-left: 80px;
-    }
-
-    .login-btn{
-        margin-right: 0;
-    }
+  .login-btn {
+    margin-right: 0;
+  }
 }
 
+@media (max-width: 1341px) {
+  .navBar .naV-link,
+  .navBar .action_btn {
+    display: none;
+  }
 
-@media(max-width: 1341px){
-    .navBar .naV-link,
-    .navBar .action_btn{
-        display: none;
-    }
+  .navBar .toggle_btn {
+    display: block;
+    margin-right: 20px;
+  }
 
-    .navBar .toggle_btn{
-        display: block;
-        margin-right: 20px;
-    }
-
-    .Dropdown_menu{
-        display: block;
-        margin-right: 20px;
-    }
+  .Dropdown_menu {
+    display: block;
+    margin-right: 20px;
+  }
 }
