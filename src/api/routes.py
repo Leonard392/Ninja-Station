@@ -188,9 +188,15 @@ def proxy_igdb(rawg_path):
             if not params.get('dates'):
                 where = where or " where first_release_date != null;"
 
-            query = f"fields id,name,slug,summary,storyline,cover.image_id,first_release_date,rating,platforms.name,genres.name,involved_companies.company.name,involved_companies.developer,involved_companies.publisher;{where} sort first_release_date desc; limit {limit}; offset {offset};"
+            where_clause = where.strip()
+            if "where " not in where_clause:
+                where_clause = " where cover != null;"
+            elif not ("cover != null" in where_clause):
+                where_clause = where_clause.rstrip(";") + " & cover != null;"
+
+            query = f"fields id,name,slug,summary,storyline,cover.image_id,first_release_date,rating,platforms.name,genres.name,involved_companies.company.name,involved_companies.developer,involved_companies.publisher;{where_clause} sort first_release_date desc; limit {limit}; offset {offset};"
             games = igdb_request("games", query)
-            results = [normalize_game(game) for game in games]
+            results = [normalize_game(game) for game in games if normalize_game(game).get("background_image")]
             next_page = page + 1 if len(results) == limit else None
             return jsonify({"count": len(results), "next": next_page, "previous": page - 1 if page > 1 else None, "results": results}), 200
 
@@ -201,8 +207,8 @@ def proxy_igdb(rawg_path):
                 if not companies:
                     return jsonify({"message": "Creator not found"}), 404
                 return jsonify(normalize_company(companies[0])), 200
-            companies = igdb_request("companies", f"fields id,name,slug,description,logo.image_id; sort name asc; limit {limit}; offset {offset};")
-            results = [normalize_company(company) for company in companies]
+            companies = igdb_request("companies", f"fields id,name,slug,description,logo.image_id; where logo != null; sort name asc; limit {limit}; offset {offset};")
+            results = [normalize_company(company) for company in companies if normalize_company(company).get("image_background")]
             next_page = page + 1 if len(results) == limit else None
             return jsonify({"count": len(results), "next": next_page, "previous": page - 1 if page > 1 else None, "results": results}), 200
 
@@ -213,8 +219,8 @@ def proxy_igdb(rawg_path):
                 if not platforms:
                     return jsonify({"message": "Platform not found"}), 404
                 return jsonify(normalize_platform(platforms[0])), 200
-            platforms = igdb_request("platforms", f"fields id,name,slug,summary,platform_logo.image_id; sort name asc; limit {limit}; offset {offset};")
-            results = [normalize_platform(platform) for platform in platforms]
+            platforms = igdb_request("platforms", f"fields id,name,slug,summary,platform_logo.image_id; where platform_logo != null; sort name asc; limit {limit}; offset {offset};")
+            results = [normalize_platform(platform) for platform in platforms if normalize_platform(platform).get("image_background")]
             next_page = page + 1 if len(results) == limit else None
             return jsonify({"count": len(results), "next": next_page, "previous": page - 1 if page > 1 else None, "results": results}), 200
 

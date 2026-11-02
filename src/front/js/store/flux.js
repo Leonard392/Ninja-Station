@@ -412,7 +412,7 @@ export const getState = ({ getStore, getActions, setStore }) => {
 				try {
 					const response = await fetch(`/api/igdb/games?dates=2024-01-01,2024-12-31&ordering=-added&page_size=${PAGE_SIZE}`);
 					const data = await response.json();
-					setStore({ bestGames2024: response.ok && Array.isArray(data.results) ? data.results : [] });
+					setStore({ bestGames2024: response.ok && Array.isArray(data.results) ? data.results.filter(item => item.background_image) : [] });
 				} catch (error) {
 					setStore({ bestGames2024: [] });
 					console.error('Error fetching best games of 2024', error);
@@ -423,7 +423,7 @@ export const getState = ({ getStore, getActions, setStore }) => {
 					const response = await fetch(`/api/igdb/creators?page=1&page_size=${PAGE_SIZE}`);
 					const data = await response.json();
 					setStore({
-						topCreators: response.ok && Array.isArray(data.results) ? data.results : [],
+						topCreators: response.ok && Array.isArray(data.results) ? data.results.filter(item => item.image || item.image_background) : [],
 						topCreatorsNextPage: response.ok ? data.next : null
 					});
 				} catch (error) {
@@ -455,7 +455,7 @@ export const getState = ({ getStore, getActions, setStore }) => {
 					const response = await fetch(`/api/igdb/platforms?page=1&page_size=${PAGE_SIZE}`);
 					const data = await response.json();
 					setStore({
-						Platforms: response.ok && Array.isArray(data.results) ? data.results : [],
+						Platforms: response.ok && Array.isArray(data.results) ? data.results.filter(item => item.image_background) : [],
 						platformsNextPage: response.ok ? data.next : null
 					});
 				} catch (error) {
