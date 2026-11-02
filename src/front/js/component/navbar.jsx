@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/Context";
 import "../../styles/navbar.css";
@@ -6,13 +6,25 @@ import "../../styles/navbar.css";
 export const Navbar = () => {
     const { store, actions } = useContext(Context);
     const [isOpen, setIsOpen] = useState(false);
+    const navbarRef = useRef(null);
+
+    useEffect(() => {
+        const handleOutsideClick = (event) => {
+            if (navbarRef.current && !navbarRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleOutsideClick);
+        return () => document.removeEventListener("mousedown", handleOutsideClick);
+    }, []);
 
     const handleClick = () => {
-        setIsOpen(!isOpen);
+        setIsOpen((open) => !open);
     };
 
     return (
-        <header>
+        <header ref={navbarRef}>
             <div className="navBar">
                 <div className="logo">
                     <Link to="/" className="link-logo">
@@ -66,7 +78,7 @@ export const Navbar = () => {
                 </div>
             </div>
 
-            <div className={`Dropdown_menu ${isOpen ? "open" : ""}`}>
+            <div className={`Dropdown_menu ${isOpen ? "open" : ""}`} onClick={() => setIsOpen(false)}>
                 <ul>
                     <li>
                         <Link to="/platforms" className="naV-link">
